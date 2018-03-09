@@ -1,0 +1,79 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Photo Blog</title>
+    <meta name="description" content="Photo Blog">
+    <style>
+        body {
+            margin: 0px;
+        }
+
+        .title {
+            height: 100vh;
+        }
+
+        .title h1 {
+            text-align: center;
+            line-height: 100vh;
+            font-family: monospace;
+        }
+
+        img.pic {
+            max-height: 90vh;
+            max-width: 95vw;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            margin-top: 15vh;
+            margin-bottom: 15vh;
+        }
+        #menu, #contant {
+            float: left;
+        }
+    </style>
+</head>
+
+<body>
+    <ul id="menu">
+        <% pages.forEach(function(page){ %>
+            <li>
+                <a href="<%= page.name %>.html">
+                    <%= page.name %>
+                </a>
+            </li>
+            <% }); %>
+    </ul>
+    <div id="content"></div>
+    <script>
+        function loadPage(pageLink) {
+            fetch(pageLink).then(function (content) {
+                return content.text();
+            }).then(function (content) {
+                document.querySelector('#content').innerHTML = content;
+            }).catch(function (error) {
+                console.error(error);
+            });
+        }
+        function init(){
+            var pages = document.querySelectorAll('#menu li');
+            pages.forEach(function (li) {
+                li.addEventListener('click', function (clickEvent) {
+                    clickEvent.preventDefault();
+                    clickEvent.stopPropagation();
+                    loadPage(clickEvent.target.href)
+                });
+            });
+            if(pages.length > 0){
+                var firstPageUrl = pages[0].querySelector('a').href;
+                loadPage(firstPageUrl);
+            }
+        }
+        document.addEventListener("DOMContentLoaded", init);
+    </script>
+</body>
+
+</html>

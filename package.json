@@ -1,0 +1,18 @@
+{
+  "name": "photoblog",
+  "version": "1.0.0",
+  "description": "Photo Blog",
+  "scripts": {
+    "build": "node ./scripts/build"
+  },
+  "keywords": [],
+  "author": "Robin Wyss",
+  "license": "ISC",
+  "devDependencies": {
+    "ejs": "^2.5.7",
+    "fs-extra": "^5.0.0",
+    "glob": "^7.1.2",
+    "sharp": "^0.20.0"
+  },
+  "dependencies": {}
+}

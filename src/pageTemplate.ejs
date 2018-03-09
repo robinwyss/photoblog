@@ -1,0 +1,12 @@
+<div>
+    <div class="title">
+        <h1><%= name%></h1>
+    </div>
+    <% pictures.forEach(function(picture){ %>
+            <picture>
+                <source srcset="<%= name + '/' + picture[720] %>" media="(max-width: 720px)">
+                <source srcset="<%= name + '/' + picture[1080] %>" media="(max-width: 1080px)">
+                <img class="pic" src="<%= name + '/' + picture[1080] %>" >
+            </picture>
+    <% }); %>
+</div>
