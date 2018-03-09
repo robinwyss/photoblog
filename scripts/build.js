@@ -48,7 +48,7 @@ function copyImages(pictureFolder, destPath) {
     globP(pictureFolder + '/*.jpg')
         .then(pictures => {
             pictures.forEach(picture => {
-                var data = resizeAndCopy(picture, destPath, [10, 720, 1080, 1600]);
+                var data = resizeAndCopy(picture, destPath, [20, 720, 1080, 1600]);
                 result.push(data)
             })
         })

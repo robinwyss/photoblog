@@ -10,29 +10,52 @@
     <style>
         body {
             margin: 0px;
+            font-family: monospace;
         }
 
         .title {
-            height: 100vh;
+            height: 20vh;
         }
 
         .title h1 {
             text-align: center;
-            line-height: 100vh;
-            font-family: monospace;
+            line-height: 20vh;
         }
 
         img.pic {
-            max-height: 90vh;
-            max-width: 95vw;
+            width: 85%;
+            max-height: 100vh;
             margin-left: auto;
             margin-right: auto;
             display: block;
             margin-top: 15vh;
             margin-bottom: 15vh;
         }
-        #menu, #contant {
-            float: left;
+
+        #menu {
+            position: fixed;
+            width: 200px;
+        }
+
+        #menu ul {
+            margin: 0px;
+            padding: 10px;
+        }
+
+        #menu li {
+            list-style: none;
+            padding: 2px 0px;
+        }
+
+        #menu a,
+        #menu a:visited,
+        #menu a:hover {
+            text-decoration: none;
+            color: black;
+        }
+
+        #content {
+            margin-left: 200px;
         }
     </style>
 </head>
@@ -48,17 +71,19 @@
             <% }); %>
     </ul>
     <div id="content"></div>
-    <script>
+
+   <script>
+        var myLazyLoad;
         function loadPage(pageLink) {
             fetch(pageLink).then(function (content) {
                 return content.text();
             }).then(function (content) {
-                document.querySelector('#content').innerHTML = content;
+                return document.querySelector('#content').innerHTML = content;
             }).catch(function (error) {
                 console.error(error);
             });
         }
-        function init(){
+        function init() {
             var pages = document.querySelectorAll('#menu li');
             pages.forEach(function (li) {
                 li.addEventListener('click', function (clickEvent) {
@@ -67,10 +92,11 @@
                     loadPage(clickEvent.target.href)
                 });
             });
-            if(pages.length > 0){
+            if (pages.length > 0) {
                 var firstPageUrl = pages[0].querySelector('a').href;
                 loadPage(firstPageUrl);
             }
+            
         }
         document.addEventListener("DOMContentLoaded", init);
     </script>
