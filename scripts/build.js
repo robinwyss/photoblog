@@ -5,13 +5,19 @@ const sharp = require('sharp');
 const { promisify } = require('util')
 const globP = promisify(require('glob'))
 const ejs = require('ejs')
-
+const moment = require('moment')
 /*
  * Settings 
  */
 const srcPath = './src'
 const distPath = './public'
-
+// matches against a folder that starts with a number
+// e.g. 01_Roadtrip
+const folderNumberedRegex = /^(\d)+[_-\s]?(.+)$/
+// matches against a folder that starts with a data, the day is optional
+// e.g 20180218_Roadtrip or 201802_Roadtrip
+// can also be separated by - or _ e.g. 2018_02_18_Roadtrip or 2018-02-18-Roadtrip 
+const folderWithDateRegex = /^^(\d{4})[_-\s]?(\d{2})[_-\s]?(\d{2})?[_-\s]?(.+)$/
 /**
  * generates multiple sizes for an image
  * 
@@ -61,22 +67,45 @@ function copyImages(pictureFolder, destPath) {
  * @returns  an object containing the name and the path. e.g. {name: California, sourcePath: pictures/01_California} 
  */
 function createPageDefinition(pictureFolder, index) {
-    const folderNameRegex = /^(\d)+_(.*)/g
+    // increment index to have it start at 1 instead of 0
+    var pageNumber = index + 1
     const folderData = path.parse(pictureFolder)
     var foldername = folderData.name;
-    console.log('input '+ foldername)
-    var match = folderNameRegex.exec(foldername);
-    console.log(JSON.stringify(match))
-    if (match && match.length === 3) {
-        index = parseInt(match[1])
-        foldername = match[2];
+    var date;
+    // try to get the date from the folder
+    var match = folderWithDateRegex.exec(foldername)
+    if (match) {
+        date = formatDate(match[1], match[2], match[3])
+        foldername = match[4]
     } else {
-        // if the index is not read from the folder name, we add 1 otherwise it would be 0 based
-        index += 1
+        // try to match numbered folders
+        match = folderNumberedRegex.exec(foldername);
+        if (match) {
+            foldername = match[2],
+                // use the number from the folder as page number
+                pageNumber = parseInt(match[1])
+        }
     }
-    console.log(JSON.stringify({ name: foldername, sourcePath: pictureFolder, index: index }))
-    return { name: foldername, sourcePath: pictureFolder, index: index }
+    return { name: foldername, sourcePath: pictureFolder, index: index, date: date }
+}
 
+/**
+ * formats the date, the deay is optional.
+ * e.g. 
+ *      2018, 10 => October 2018
+ *      2018, 10, 18 => October 18, 2018
+ * 
+ * @param {string} year 
+ * @param {string} month 
+ * @param [{string} day] 
+ */
+function formatDate(year, month, day) {
+    console.log(`${year} ${month} ${day}`)
+    if (day) {
+        return moment(`${year}-${month}-${day}`).format('MMMM DD, YYYY')
+    } else {
+        return moment(`${year}-${month}`).format('MMMM YYYY')
+    }
 }
 
 /**
@@ -93,7 +122,7 @@ function generatePicturePage(page) {
     console.info('generating HTML files')
     fse.readFile('./src/pageTemplate.ejs', 'utf-8')
         .then(templateContent => {
-            const content = ejs.render(templateContent, { pictures: result, name: page.name })
+            const content = ejs.render(templateContent, { pictures: result, page: page })
             const htmlFileName = `${distPath}/${page.name}.html`
             console.info(`generating HTML file: ${htmlFileName}`)
             fse.writeFile(htmlFileName, content)
@@ -128,7 +157,7 @@ globP('pages/*')
             generatePicturePage(page)
         })
         // sort in reverse order to have the newest post first
-        var sortedPages = pages.sort((a,b) => {
+        var sortedPages = pages.sort((a, b) => {
             return b.index - a.index;
         })
         generateIndex(sortedPages);

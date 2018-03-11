@@ -1,12 +1,17 @@
 <div>
     <div class="title">
-        <h1><%= name%></h1>
+        <span>
+            <h1><%= page.name%></h1>
+            <% if (page.date) { %>
+                <h2><%= page.date %></h2>    
+            <%} %>
+        </span>        
     </div>
     <% pictures.forEach(function(picture){ %>
             <picture>
-                <source srcset="<%= name + '/' + picture[720] %>" media="(max-width: 720px)">
-                <source srcset="<%= name + '/' + picture[1080] %>" media="(max-width: 1080px)">
-                <img class="pic" src="<%= name + '/' + picture[1600] %>" >
+                <source srcset="<%= page.name + '/' + picture[720] %>" media="(max-width: 720px)">
+                <source srcset="<%= page.name + '/' + picture[1080] %>" media="(max-width: 1080px)">
+                <img class="pic" src="<%= page.name + '/' + picture[1600] %>" >
             </picture>
     <% }); %>
 </div>

@@ -14,5 +14,7 @@
     "glob": "^7.1.2",
     "sharp": "^0.20.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "moment": "^2.21.0"
+  }
 }
