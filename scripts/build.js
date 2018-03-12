@@ -150,7 +150,7 @@ function generateIndex(pages) {
 // clear destination folder
 fse.emptyDirSync(distPath)
 
-globP('pages/*')
+globP('pages/!(*.txt)')
     .then((pictureFolders) => {
         const pages = pictureFolders.map(createPageDefinition)
         pages.forEach((page) => {
