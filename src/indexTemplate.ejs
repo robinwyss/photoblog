@@ -7,14 +7,16 @@
 
     <title>Photo Blog</title>
     <meta name="description" content="Photo Blog">
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' />
     <style>
-        body {
+       body {
             margin: 0px;
             font-family: monospace;
         }
 
         .title {
-            height: 20vh;
+            height: 40vh;
             text-align: center;
         }
 
@@ -35,6 +37,11 @@
         #menu {
             position: fixed;
             width: 200px;
+            top: 0px;
+            background-color: white;
+            margin: 0px;
+            padding: 10px;
+            height: 100vh;
         }
 
         #menu ul {
@@ -57,6 +64,16 @@
         #content {
             margin-left: 200px;
         }
+
+        #map {
+            width: 100%;
+            height: 80vh;
+            position: fixed;
+            z-index: -1;
+            top: 0px;
+            overflow: hidden;
+            left: 0px;
+        }
     </style>
 </head>
 
@@ -71,6 +88,18 @@
             <% }); %>
     </ul>
     <div id="content"></div>
+    <div id='map'></div>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoicGx1cnBzIiwiYSI6ImNpbXY4M2xkMTAyb3F2cWx1bnI3MWN2cGQifQ.dn9cVA-CVwTjEO3KTxvmZw';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/plurps/cjennp0qn8az42rmwtpgidve1',
+            center: [-87.240372, 30.433283],
+            zoom: 9
+        }).addControl(new mapboxgl.AttributionControl({
+            compact: true
+        }));
+    </script>
 
     <script>
             function loadPage(pageLink) {
