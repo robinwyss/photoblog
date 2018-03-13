@@ -7,57 +7,7 @@
 
     <title>Photo Blog</title>
     <meta name="description" content="Photo Blog">
-    <style>
-        body {
-            margin: 0px;
-            font-family: monospace;
-        }
-
-        .title {
-            height: 20vh;
-            text-align: center;
-        }
-
-        .title h1 {
-            padding-top: 10vh;
-        }
-
-        img.pic {
-            width: 85%;
-            max-height: 100vh;
-            margin-left: auto;
-            margin-right: auto;
-            display: block;
-            margin-top: 15vh;
-            margin-bottom: 15vh;
-        }
-
-        #menu {
-            position: fixed;
-            width: 200px;
-        }
-
-        #menu ul {
-            margin: 0px;
-            padding: 10px;
-        }
-
-        #menu li {
-            list-style: none;
-            padding: 2px 0px;
-        }
-
-        #menu a,
-        #menu a:visited,
-        #menu a:hover {
-            text-decoration: none;
-            color: black;
-        }
-
-        #content {
-            margin-left: 200px;
-        }
-    </style>
+    <link href="styles.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -72,56 +22,7 @@
     </ul>
     <div id="content"></div>
 
-    <script>
-            function loadPage(pageLink) {
-                // remove # and append .html
-                var url = pageLink.slice(1) + '.html';
-                fetch(url).then(function (content) {
-                    return content.text();
-                }).then(function (content) {
-                    return document.querySelector('#content').innerHTML = content;
-                }).catch(function (error) {
-                    console.error(error);
-                });
-            }
-    
-            function getRelativeUrl(link) {
-                var url = link.href
-                if (url.startsWith(link.baseURI)) {
-                    return url.substring(link.baseURI.length);
-                } else {
-                    return url;
-                }
-            }
-    
-            function router() {
-                var pages = document.querySelectorAll('#menu li');
-                // Current route url (getting rid of '#' in hash as well):
-                var url = location.hash;
-                if (url) {
-                    loadPage(url);
-                } else {
-                    // no page specified, load the latest one (first in the list)
-                    var firstPageLink = pages[0].querySelector('a');
-                    var firstPageUrl = getRelativeUrl(firstPageLink);
-                    loadPage(firstPageUrl);
-                }
-            }
-            function init() {
-                var pages = document.querySelectorAll('#menu li a');
-                // prepend menu links with #, this allows to have a fallback if js is disabled
-                pages.forEach(function (link) {
-                    var url = getRelativeUrl(link)
-                    // remove .html extension
-                    url = url.substring(0, url.length - 5);
-                    // prepend # and remove .html ending
-                    link.href = '#' + url;
-                });
-                router();
-            }
-            document.addEventListener("DOMContentLoaded", init);
-            window.addEventListener('hashchange', router);
-        </script>
+    <script src="app.js" ></script>
 </body>
 
 </html>

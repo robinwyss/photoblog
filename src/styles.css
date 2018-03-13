@@ -1,0 +1,49 @@
+body {
+    margin: 0px;
+    font-family: monospace;
+}
+
+.title {
+    height: 20vh;
+    text-align: center;
+}
+
+.title h1 {
+    padding-top: 10vh;
+}
+
+img.pic {
+    width: 85%;
+    max-height: 100vh;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-top: 15vh;
+    margin-bottom: 15vh;
+}
+
+#menu {
+    position: fixed;
+    width: 200px;
+}
+
+#menu ul {
+    margin: 0px;
+    padding: 10px;
+}
+
+#menu li {
+    list-style: none;
+    padding: 2px 0px;
+}
+
+#menu a,
+#menu a:visited,
+#menu a:hover {
+    text-decoration: none;
+    color: black;
+}
+
+#content {
+    margin-left: 200px;
+}

@@ -28,18 +28,20 @@ const folderWithDateRegex = /^^(\d{4})[_-\s]?(\d{2})[_-\s]?(\d{2})?[_-\s]?(.+)$/
 function resizeAndCopy(source, destFolder, sizes) {
     const picData = path.parse(source)
     const data = {}
-    sizes.forEach((size) => {
+    return sizes.reduce((promise, size) => {
         const fileName = picData.name + '_' + size + picData.ext
         const destPicturePath = path.join(destFolder, fileName)
-        sharp(source)
-            .resize(size)
-            .toFile(destPicturePath).then(() => {
-                data[size] = fileName
-            }).catch((error) => {
-                console.log(error)
-            })
-    })
-    return data
+        return promise.then(result => {
+            return sharp(source)
+                .resize(size)
+                .toFile(destPicturePath).then(() => {
+                    result[size] = fileName;
+                    return result;
+                }).catch((error) => {
+                    console.log(error)
+                })
+        });
+    }, Promise.resolve({}));
 }
 
 /**
@@ -51,14 +53,14 @@ function resizeAndCopy(source, destFolder, sizes) {
  */
 function copyImages(pictureFolder, destPath) {
     const result = []
-    globP(pictureFolder + '/*.jpg')
+    return globP(pictureFolder + '/*.jpg')
         .then(pictures => {
-            pictures.forEach(picture => {
-                var data = resizeAndCopy(picture, destPath, [20, 720, 1080, 1600]);
-                result.push(data)
+            const result = pictures.map(picture => {
+                const data = resizeAndCopy(picture, destPath, [20, 720, 1080, 1600]);
+                return data
             })
+            return Promise.all(result);
         })
-    return result;
 }
 
 /**
@@ -100,7 +102,6 @@ function createPageDefinition(pictureFolder, index) {
  * @param [{string} day] 
  */
 function formatDate(year, month, day) {
-    console.log(`${year} ${month} ${day}`)
     if (day) {
         return moment(`${year}-${month}-${day}`).format('MMMM DD, YYYY')
     } else {
@@ -118,17 +119,19 @@ function generatePicturePage(page) {
     // create destination directory
     fse.mkdirs(destPath)
     console.info(`resize images ${page.name}`)
-    const result = copyImages(page.sourcePath, destPath)
-    console.info('generating HTML files')
-    fse.readFile('./src/pageTemplate.ejs', 'utf-8')
-        .then(templateContent => {
-            const content = ejs.render(templateContent, { pictures: result, page: page })
-            const htmlFileName = `${distPath}/${page.name}.html`
-            console.info(`generating HTML file: ${htmlFileName}`)
-            fse.writeFile(htmlFileName, content)
-        }).catch((error) => {
-            console.error(error);
-        })
+    return copyImages(page.sourcePath, destPath).then(result => {
+        console.info('generating HTML files')
+        return fse.readFile('./src/pageTemplate.ejs', 'utf-8')
+            .then(templateContent => {
+                const content = ejs.render(templateContent, { pictures: result, page: page })
+                const htmlFileName = `${distPath}/${page.name}.html`
+                console.info(`generating HTML file: ${htmlFileName}`)
+                fse.writeFile(htmlFileName, content)
+            })
+    }).catch((error) => {
+        console.error(error);
+    })
+
 }
 
 /**
@@ -137,13 +140,13 @@ function generatePicturePage(page) {
  * @param {object[]} pages 
  */
 function generateIndex(pages) {
-    fse.readFile('./src/indexTemplate.ejs', 'utf-8')
+    return fse.readFile('./src/indexTemplate.ejs', 'utf-8')
         .then(templateContent => {
             const content = ejs.render(templateContent, { pages: pages })
             console.info('generating index file')
-            fse.writeFile(`${distPath}/index.html`, content)
-        }).catch((error) => {
-            console.error(error);
+            return fse.writeFile(`${distPath}/index.html`, content)
+                .then(fse.copyFile(`${srcPath}/styles.css`, `${distPath}/styles.css`))
+                .then(fse.copyFile(`${srcPath}/app.js`, `${distPath}/app.js`))
         })
 }
 
@@ -153,14 +156,16 @@ fse.emptyDirSync(distPath)
 globP('pages/!(*.txt)')
     .then((pictureFolders) => {
         const pages = pictureFolders.map(createPageDefinition)
-        pages.forEach((page) => {
-            generatePicturePage(page)
-        })
-        // sort in reverse order to have the newest post first
-        var sortedPages = pages.sort((a, b) => {
-            return b.index - a.index;
-        })
-        generateIndex(sortedPages);
+        var promises = pages.map((page) => {
+            return generatePicturePage(page)
+        });
+        return Promise.all(promises).then(() => {
+            // sort in reverse order to have the newest post first
+            var sortedPages = pages.sort((a, b) => {
+                return b.index - a.index;
+            })
+            return generateIndex(sortedPages);
+        });
     }).catch((error) => {
         console.error(error);
     });
