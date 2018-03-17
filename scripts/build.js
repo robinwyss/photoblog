@@ -85,7 +85,9 @@ function createPageDefinition(pictureFolder, index) {
 			pageNumber = parseInt(match[1])
 		}
 	}
-	return { name: foldername, sourcePath: pictureFolder, index: pageNumber, date: date }
+	// page name without spaces to use in urls
+	var documentName = foldername.replace(' ', '')
+	return { name: foldername, documentName: documentName, sourcePath: pictureFolder, index: pageNumber, date: date }
 }
 
 /**
@@ -112,7 +114,7 @@ function formatDate(year, month, day) {
  * @param {object} page 
  */
 function generatePicturePage(page) {
-	const destPath = path.join(distPath, page.name)
+	const destPath = path.join(distPath, page.documentName)
 	// create destination directory
 	fse.mkdirs(destPath)
 	console.info(`resize images ${page.name}`)
@@ -121,7 +123,7 @@ function generatePicturePage(page) {
 		return fse.readFile('./src/pageTemplate.ejs', 'utf-8')
 			.then(templateContent => {
 				const content = ejs.render(templateContent, { pictures: result, page: page })
-				const htmlFileName = `${distPath}/${page.name}.html`
+				const htmlFileName = `${distPath}/${page.documentName}.html`
 				console.info(`generating HTML file: ${htmlFileName}`)
 				fse.writeFile(htmlFileName, content)
 			})

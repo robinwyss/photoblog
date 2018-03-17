@@ -5,21 +5,11 @@ function loadPage(pageLink) {
 		return content.text()
 	}).then(function (content) {
 		window.scrollTo(0, 0)
-		var parsedContent = applyLazyLoad(content)
-		document.querySelector('#content').innerHTML = parsedContent
+		document.querySelector('#content').innerHTML = content
 		window.lazyLoadInstance.update()
 	}).catch(function (error) {
 		console.error(error)
 	})
-}
-
-function getRelativeUrl(link) {
-	var url = link.href
-	if (url.startsWith(link.baseURI)) {
-		return url.substring(link.baseURI.length)
-	} else {
-		return url
-	}
 }
 
 function router() {
@@ -31,20 +21,10 @@ function router() {
 	} else {
 		// no page specified, load the latest one (first in the list)
 		var firstPageLink = pages[0].querySelector('a')
-		var firstPageUrl = getRelativeUrl(firstPageLink)
-		loadPage(firstPageUrl)
+		loadPage(firstPageLink.hash)
 	}
 }
 function init() {
-	var pages = document.querySelectorAll('#menu li a')
-	// prepend menu links with #, this allows to have a fallback if js is disabled
-	pages.forEach(function (link) {
-		var url = getRelativeUrl(link)
-		// remove .html extension
-		url = url.substring(0, url.length - 5)
-		// prepend # and remove .html ending
-		link.href = '#' + url
-	})
 	initLazyLoad().then(function () {
 		router()
 	})
@@ -59,22 +39,6 @@ function initLazyLoad() {
 			resolve()
 		}, false)
 	})
-}
-
-function applyLazyLoad(content) {
-	var wrapper = document.createElement('div')
-	wrapper.innerHTML = content
-	wrapper.querySelectorAll('picture').forEach(pic => {
-		var placeholderImg = pic.querySelector('source.placeholderImg')
-		var img = pic.querySelector('img')
-		img.setAttribute('data-src', img.src)
-		img.src = placeholderImg.srcset
-		pic.querySelectorAll('source').forEach(source => {
-			source.setAttribute('data-srcset', source.srcset)
-			source.srcset = ''
-		})
-	})
-	return wrapper.innerHTML
 }
 
 document.addEventListener('DOMContentLoaded', init)

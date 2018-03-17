@@ -21,12 +21,12 @@ img.pic {
     margin-right: auto;
     display: block;
     margin-top: 15vh;
-    margin-bottom: 15vh;
-    filter: blur(10px)
+		margin-bottom: 15vh;
+		filter: blur(10px);
 }
 
 img.pic.loaded {
-    filter: blur(0px)
+    filter: blur(0px);
 }
 
 #menu {
