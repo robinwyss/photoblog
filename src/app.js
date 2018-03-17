@@ -4,7 +4,10 @@ function loadPage(pageLink) {
     fetch(url).then(function (content) {
         return content.text();
     }).then(function (content) {
-        return document.querySelector('#content').innerHTML = content;
+        window.scrollTo(0, 0);
+        var parsedContent = applyLazyLoad(content)
+        document.querySelector('#content').innerHTML = parsedContent;
+        window.lazyLoadInstance.update();
     }).catch(function (error) {
         console.error(error);
     });
@@ -42,7 +45,43 @@ function init() {
         // prepend # and remove .html ending
         link.href = '#' + url;
     });
-    router();
+    initLazyLoad().then(function(){
+        router();
+    });
 }
+
+function initLazyLoad() {
+    return new Promise(function (resolve) {
+        // Listen to the Initialized event
+        window.addEventListener('LazyLoad::Initialized', function (e) {
+            // Get the instance and puts it in the lazyLoadInstance variable
+            window.lazyLoadInstance = e.detail.instance;
+            resolve();
+        }, false);
+
+        // Set the lazyload options for async usage
+        // lazyLoadOptions = {
+        //     class_loaded: "loaded"
+        //     /* your lazyload options */
+        // };
+    });
+}
+
+function applyLazyLoad(content) {
+    var wrapper = document.createElement('div');
+    wrapper.innerHTML = content;
+    wrapper.querySelectorAll('picture').forEach(pic => {
+        var placeholderImg = pic.querySelector('source.placeholderImg');
+        var img = pic.querySelector('img');
+        img.setAttribute('data-src', img.src);
+        img.src = placeholderImg.srcset;
+        pic.querySelectorAll('source').forEach(source => {
+            source.setAttribute('data-srcset', source.srcset)
+            source.srcset = '';
+        })
+    });
+    return wrapper.innerHTML;
+}
+
 document.addEventListener("DOMContentLoaded", init);
 window.addEventListener('hashchange', router);

@@ -8,6 +8,7 @@
     <title>Photo Blog</title>
     <meta name="description" content="Photo Blog">
     <link href="styles.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 </head>
 
 <body>
@@ -21,8 +22,18 @@
             <% }); %>
     </ul>
     <div id="content"></div>
+    <script>
+        (function (w, d) {
+            var b = d.getElementsByTagName('body')[0];
+            var s = d.createElement("script"); s.async = true;
+            var v = !("IntersectionObserver" in w) ? "8.6.0" : "10.4.2";
+            s.src = "https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/" + v + "/lazyload.min.js";
+            w.lazyLoadOptions = {class_loaded: "loaded"}; // Your options here. See "recipes" for more information about async.
+            b.appendChild(s);
+        }(window, document));
+    </script>
+    <script src="app.js"></script>
 
-    <script src="app.js" ></script>
 </body>
 
 </html>

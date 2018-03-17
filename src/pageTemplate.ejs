@@ -1,17 +1,23 @@
 <div>
     <div class="title">
         <span>
-            <h1><%= page.name%></h1>
+            <h1>
+                <%= page.name%>
+            </h1>
             <% if (page.date) { %>
-                <h2><%= page.date %></h2>    
-            <%} %>
-        </span>        
+                <h2>
+                    <%= page.date %>
+                </h2>
+                <%} %>
+        </span>
     </div>
     <% pictures.forEach(function(picture){ %>
-            <picture>
-                <source srcset="<%= page.name + '/' + picture[720] %>" media="(max-width: 720px)">
-                <source srcset="<%= page.name + '/' + picture[1080] %>" media="(max-width: 1080px)">
-                <img class="pic" src="<%= page.name + '/' + picture[1600] %>" >
-            </picture>
+        <picture>
+            <!-- small image as placeholder for lazyload -->
+            <source class="placeholderImg" srcset="<%= page.name + '/' + picture[20] %>" media="(max-width: 20px)">
+            <source srcset="<%= page.name + '/' + picture[720] %>" media="(max-width: 720px)">
+            <source srcset="<%= page.name + '/' + picture[1080] %>" media="(max-width: 1080px)">
+            <img class="pic" src="<%= page.name + '/' + picture[1600] %>">
+        </picture>
     <% }); %>
 </div>

@@ -1,15 +1,17 @@
 body {
     margin: 0px;
-    font-family: monospace;
+    font-family: Archivo Narrow, monospace;
 }
 
 .title {
-    height: 20vh;
+    min-height: 20vh;
     text-align: center;
 }
 
 .title h1 {
-    padding-top: 10vh;
+    font-size: 10vw;
+    margin: 0;
+    line-height: 1;
 }
 
 img.pic {
@@ -20,11 +22,21 @@ img.pic {
     display: block;
     margin-top: 15vh;
     margin-bottom: 15vh;
+    filter: blur(10px)
+}
+
+img.pic.loaded {
+    filter: blur(0px)
 }
 
 #menu {
     position: fixed;
     width: 200px;
+    height: 100vh;
+}
+
+#menu:hover {
+    overflow: auto;
 }
 
 #menu ul {
