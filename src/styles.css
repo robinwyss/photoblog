@@ -15,7 +15,7 @@ body {
 }
 
 img.pic {
-    width: 85%;
+    max-width: 85%;
     max-height: 100vh;
     margin-left: auto;
     margin-right: auto;
