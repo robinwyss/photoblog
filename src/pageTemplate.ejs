@@ -12,12 +12,7 @@
 		</span>
 	</div>
 	<% pictures.forEach(function(picture){ %>
-		<picture>
-			<!-- small image as placeholder for lazyload -->
-			<source data-srcset="<%= page.documentName + '/' + picture[1600] %>" media="(min-width: 1080px)">
-			<source data-srcset="<%= page.documentName + '/' + picture[720] %>" media="(max-width: 720px)">
-			<source data-srcset="<%= page.documentName + '/' + picture[1080] %>" media="(max-width: 1080px)">
-			<img class="pic" src="<%= page.documentName + '/' + picture[20] %>">
-		</picture>
+		<img class="pic" src="<%=page.documentName + '/' +picture.placeholder %>" data-srcset="<%- imgSizes.reduce( (a, size) => 
+			a + page.documentName + '/' + picture[size] + ' ' + size + 'w, ', '') %>" />
 		<% }); %>
 </div>
