@@ -24,6 +24,14 @@ module.exports = function (srcPath, distPath, imgSizes) {
 		console.info(`resize images ${page.name}`)
 		return images.copyAndResizeImages(page.sourcePath, destPath, imgSizes)
 			.then(pictures => {
+				// sort pictures by name
+				pictures = pictures.sort((a, b) => {
+					const aName = a.name.toUpperCase()
+					const bName = b.name.toUpperCase()
+					if (aName < bName) return -1
+					if (aName > bName) return 1
+					return 0
+				})
 				console.info('generating HTML files')
 				return fse.readFile('./src/pageTemplate.ejs', 'utf-8')
 					.then(templateContent => {

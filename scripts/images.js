@@ -25,8 +25,11 @@ module.exports = function () {
 		return globP(pictureFolder + '/*.jpg')
 			.then(pictures => {
 				const result = pictures.map(picture => {
-					const data = generateSizes(picture, destPath, sizes)
-					return data
+					return generateSizes(picture, destPath, sizes).then(data => {
+						const pictureData = path.parse(picture)
+						data.name = pictureData.name + pictureData.ext 
+						return data
+					})
 				})
 				return Promise.all(result)
 			})
