@@ -12,7 +12,14 @@
 		</span>
 	</div>
 	<% pictures.forEach(function(picture){ %>
-		<img class="pic" src="<%=page.documentName + '/' +picture.placeholder %>" data-srcset="<%- imgSizes.reduce( (a, size) => 
-			a + page.documentName + '/' + picture[size] + ' ' + size + 'w, ', '') %>" />
+		<div class="picture-container">
+			<figure>
+				<img class="pic" src="<%=page.documentName + '/' +picture.placeholder %>" data-srcset="<%- imgSizes.reduce( (a, size) => 
+					a + page.documentName + '/' + picture[size] + ' ' + size + 'w, ', '') %>" />
+				<figcaption>
+					<%=picture.description%>
+				</figcaption>
+			</figure>
+		</div>
 		<% }); %>
 </div>

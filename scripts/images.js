@@ -2,6 +2,7 @@ const sharp = require('sharp')
 const { promisify } = require('util')
 const globP = promisify(require('glob'))
 const path = require('path')
+const exif = require('exif').ExifImage
 
 /**
  * This module is used resize and copy the images
@@ -24,11 +25,14 @@ module.exports = function () {
 	function copyAndResizeImages(pictureFolder, destPath, sizes) {
 		return globP(pictureFolder + '/*.jpg')
 			.then(pictures => {
-				const result = pictures.map(picture => {
-					return generateSizes(picture, destPath, sizes).then(data => {
-						const pictureData = path.parse(picture)
-						data.name = pictureData.name + pictureData.ext 
-						return data
+				const result = pictures.map(picturePath => {
+					return generateSizes(picturePath, destPath, sizes).then(data => {
+						const pictureData = path.parse(picturePath)
+						data.name = pictureData.name + pictureData.ext
+						return readDescriptionFromExif(picturePath).then(description => {
+							data.description = description
+							return data
+						})
 					})
 				})
 				return Promise.all(result)
@@ -60,7 +64,7 @@ module.exports = function () {
 		}, Promise.resolve({})).then(sizeDefinitions => {
 			return resizeAndCopy(source, 20, destFolder).then(fileName => {
 				sizeDefinitions.placeholder = fileName
-				return  sizeDefinitions
+				return sizeDefinitions
 			})
 		})
 	}
@@ -79,6 +83,24 @@ module.exports = function () {
 		return sharp(source)
 			.resize(size)
 			.toFile(destPicturePath).then(() => fileName)
+	}
+
+	function readDescriptionFromExif(path) {
+		return new Promise((resolve, reject) => {
+
+			try {
+				new exif({ image: path }, function (error, exifData) {
+					if (error) {
+						reject(error.message)
+					}
+					else {
+						resolve(exifData.image.ImageDescription)
+					}
+				})
+			} catch (error) {
+				reject(error.message)
+			}
+		})
 	}
 
 
