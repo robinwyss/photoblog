@@ -26,7 +26,7 @@ module.exports = function (srcPath, distPath, imgSizes) {
 		if (match) {
 			date = formatDate(match[1], match[2])
 			// use the number from the folder as page number
-			pageNumber = parseInt(match[1])
+			pageNumber = parseInt(match[3])
 			foldername = match[4]
 		} else {
 			// try to match numbered folders
