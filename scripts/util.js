@@ -2,7 +2,7 @@
 
 const moment = require('moment')
 
-module.exports = function (srcPath, distPath, imgSizes) {
+module.exports = function () {
 
 	// matches against a folder that starts with a number
 	// e.g. 01_Roadtrip

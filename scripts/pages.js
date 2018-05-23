@@ -10,7 +10,7 @@ const images = require('./images')()
  * @param {string} distPath 
  * @param {[int]} imgSizes: array of sizes for which the pictures exists
  */
-module.exports = function (srcPath, distPath, imgSizes) {
+module.exports = function (srcPath, distPath, imageOptions) {
 
 	/**
 	 * Generates a page
@@ -22,7 +22,7 @@ module.exports = function (srcPath, distPath, imgSizes) {
 		// create destination directory
 		fse.mkdirs(destPath)
 		console.info(`resize images ${page.name}`)
-		return images.copyAndResizeImages(page.sourcePath, destPath, imgSizes)
+		return images.copyAndResizeImages(page.sourcePath, destPath, imageOptions.sizes)
 			.then(pictures => {
 				// sort pictures by name
 				pictures = pictures.sort((a, b) => {
@@ -35,7 +35,7 @@ module.exports = function (srcPath, distPath, imgSizes) {
 				console.info('generating HTML files')
 				return fse.readFile('./src/pageTemplate.ejs', 'utf-8')
 					.then(templateContent => {
-						const content = ejs.render(templateContent, { pictures, page, imgSizes })
+						const content = ejs.render(templateContent, { pictures, page, imageOptions })
 						const htmlFileName = `${distPath}/${page.documentName}.html`
 						console.info(`generating HTML file: ${htmlFileName}`)
 						fse.writeFile(htmlFileName, content)
@@ -51,14 +51,15 @@ module.exports = function (srcPath, distPath, imgSizes) {
 	 * 
 	 * @param {object[]} pages 
 	 */
-	function generateIndex(pages) {
+	function generateIndex(pages, title) {
 		return fse.readFile('./src/indexTemplate.ejs', 'utf-8')
 			.then(templateContent => {
-				const content = ejs.render(templateContent, { pages: pages })
+				const content = ejs.render(templateContent, { pages, title })
 				console.info('generating index file')
 				return fse.writeFile(`${distPath}/index.html`, content)
 					.then(fse.copyFile(`${srcPath}/styles.css`, `${distPath}/styles.css`))
 					.then(fse.copyFile(`${srcPath}/app.js`, `${distPath}/app.js`))
+					.then(fse.copyFile(`${srcPath}/favicon.ico`, `${distPath}/favicon.ico`))
 			})
 	}
 

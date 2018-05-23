@@ -4,8 +4,12 @@
 const srcPath = './src'
 const distPath = './public'
 
+const title = 'KIRO'
 //
-const imgSizes = [720, 1080, 1600]
+const imageOptions = {
+	sizes: [720, 1080, 1600],
+	showTitle: false
+}
 
 
 const fse = require('fs-extra')
@@ -14,7 +18,7 @@ const path = require('path')
 const { promisify } = require('util')
 const globP = promisify(require('glob'))
 
-const pageGen = require('./pages')(srcPath, distPath, imgSizes)
+const pageGen = require('./pages')(srcPath, distPath, imageOptions)
 const util = require('./util')()
 
 /**
@@ -41,14 +45,14 @@ globP('pages/!(*.txt)')
 	.then((pictureFolders) => {
 		const pages = pictureFolders.map(createPageDefinition)
 		var promises = pages.map((page) => {
-			return pageGen.generatePicturePage(page, imgSizes)
+			return pageGen.generatePicturePage(page)
 		})
 		return Promise.all(promises).then(() => {
 			// sort in reverse order to have the newest post first
 			var sortedPages = pages.sort((a, b) => {
 				return b.index - a.index
 			})
-			return pageGen.generateIndex(sortedPages)
+			return pageGen.generateIndex(sortedPages, title)
 		})
 	}).catch((error) => {
 		console.error(error)
