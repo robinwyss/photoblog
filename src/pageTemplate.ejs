@@ -14,12 +14,14 @@
 	<% pictures.forEach(function(picture){ %>
 		<div class="picture-container">
 			<figure>
-				<img class="pic" src="<%=page.documentName + '/' +picture.placeholder %>" data-srcset="<%- imgSizes.reduce( (a, size) => 
+				<img class="pic" src="<%=page.documentName + '/' +picture.placeholder %>" data-srcset="<%- imageOptions.sizes.reduce( (a, size) => 
 					a + page.documentName + '/' + picture[size] + ' ' + size + 'w, ', '') %>" />
+			</figure>
+			<% if (picture.description && imageOptions.showTitle) { %>
 				<figcaption>
 					<%=picture.description%>
 				</figcaption>
-			</figure>
+			<%} %>
 		</div>
 		<% }); %>
 </div>

@@ -1,6 +1,8 @@
-body {
-    margin: 0px;
-    font-family: Archivo Narrow, monospace;
+
+html, body {
+  margin: 0;
+	padding: 0;
+	font-family: Archivo Narrow, monospace;
 }
 
 .title {
@@ -25,10 +27,14 @@ body {
 	text-align: center;
 }
 
+figure {
+	margin: 0px;
+}
+
 img.pic {
     display: block;
 		filter: blur(10px);
-		max-width: 85%;
+		max-width: 90vw;
     max-height: 100vh;
 		margin-left: auto;
 		margin-right: auto;
@@ -44,12 +50,17 @@ img.pic.loaded {
 	ul#menu {
     position: relative;
     width: 100%;
-    height: auto;
+		height: auto;
+		overflow: hidden;
 	}
 
 	ul#menu li {
 		float: left;
     margin-right: 20px;
+	}
+
+	div#content {
+		margin-left: 0px;
 	}
 }
 
@@ -74,10 +85,14 @@ img.pic.loaded {
 }
 
 #menu a,
-#menu a:visited,
-#menu a:hover {
+#menu a:visited {
     text-decoration: none;
-    color: black;
+    color: #9a97a3;
+}
+
+#menu a:hover {
+	text-decoration: none;
+	color: #000;
 }
 
 #content {

@@ -3,36 +3,43 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
+	<meta charset="utf-8">
 
-    <title>Photo Blog</title>
-    <meta name="description" content="Photo Blog">
-    <link href="styles.css" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+	<title>
+		<%= title %>
+	</title>
+	<meta name="description" content="Photo Blog">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="styles.css" rel="stylesheet" type="text/css" />
+	<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 </head>
 
 <body>
-    <ul id="menu">
-        <% pages.forEach(function(page){ %>
-            <li>
-                <a href="#<%= page.documentName %>">
-                    <%= page.name %>
-                </a>
-            </li>
-            <% }); %>
-    </ul>
-    <div id="content"></div>
-    <script>
-        (function (w, d) {
-            var b = d.getElementsByTagName('body')[0];
-            var s = d.createElement("script"); s.async = true;
-            var v = !("IntersectionObserver" in w) ? "8.6.0" : "10.4.2";
-            s.src = "https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/" + v + "/lazyload.min.js";
-            w.lazyLoadOptions = {class_loaded: "loaded"}; // Your options here. See "recipes" for more information about async.
-            b.appendChild(s);
-        }(window, document));
-    </script>
-    <script src="app.js"></script>
+	<nav>
+		<ul id="menu">
+			<% pages.forEach(function(page){ %>
+				<li>
+					<a href="#<%= page.documentName %>">
+						<%= page.name %>
+					</a>
+				</li>
+				<% }); %>
+		</ul>
+	</nav>
+
+	<div id="content"></div>
+	<script>
+		(function (w, d) {
+			var b = d.getElementsByTagName('body')[0];
+			var s = d.createElement("script"); s.async = true;
+			var v = !("IntersectionObserver" in w) ? "8.6.0" : "10.4.2";
+			s.src = "https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/" + v + "/lazyload.min.js";
+			w.lazyLoadOptions = { class_loaded: "loaded" }; // Your options here. See "recipes" for more information about async.
+			b.appendChild(s);
+		}(window, document));
+	</script>
+	<script src="app.js"></script>
 
 </body>
+
 </html>
