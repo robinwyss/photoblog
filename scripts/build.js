@@ -7,7 +7,7 @@ const distPath = './public'
 const title = 'KIRO'
 //
 const imageOptions = {
-	sizes: [720, 1080, 1600],
+	sizes: [720, 1200],
 	showTitle: false
 }
 

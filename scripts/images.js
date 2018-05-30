@@ -82,6 +82,9 @@ module.exports = function () {
 		const destPicturePath = path.join(destFolder, fileName)
 		return sharp(source)
 			.resize(size)
+			.jpeg({
+				quality: 80,
+			})
 			.toFile(destPicturePath).then(() => fileName)
 	}
 
