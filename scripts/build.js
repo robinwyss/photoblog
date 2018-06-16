@@ -1,16 +1,3 @@
-/*
- * Settings 
- */
-const srcPath = './src'
-const distPath = './public'
-
-const title = 'KIRO'
-//
-const imageOptions = {
-	sizes: [720, 1080],
-	showTitle: false
-}
-
 
 const fse = require('fs-extra')
 const path = require('path')
@@ -18,8 +5,9 @@ const path = require('path')
 const { promisify } = require('util')
 const globP = promisify(require('glob'))
 
-const pageGen = require('./pages')(srcPath, distPath, imageOptions)
+
 const util = require('./util')()
+
 
 /**
  * Creates a page defintion (object containing name and path) from a path.
@@ -39,21 +27,50 @@ function createPageDefinition(pictureFolder, index) {
 
 
 // clear destination folder
-fse.emptyDirSync(distPath)
+//fse.emptyDirSync(distPath)
 
-globP('pages/!(*.txt)')
-	.then((pictureFolders) => {
-		const pages = pictureFolders.map(createPageDefinition)
-		var promises = pages.map((page) => {
-			return pageGen.generatePicturePage(page)
-		})
-		return Promise.all(promises).then(() => {
-			// sort in reverse order to have the newest post first
-			var sortedPages = pages.sort((a, b) => {
-				return b.index - a.index
-			})
-			return pageGen.generateIndex(sortedPages, title)
-		})
-	}).catch((error) => {
-		console.error(error)
+//var tempSettings = JSON.parse(fse.readFileSync('/path/to/file.json', 'utf8'));
+function readSettingsAndTempData() {
+	var settingsP = fse.readFile('settings.json', 'utf8').then(file => {
+		return JSON.parse(file)
+	}).catch(() => {
+		console.warn('no settings found, using default settings')
+		return {
+			srcPath: './src', distPath: './public', title: 'KIRO', imageOptions: {
+				sizes: [720, 1080],
+				showTitle: false
+			}
+		}
 	})
+	var tempP = fse.readFile('.temp.json', 'utf8').then(file => {
+		return JSON.parse(file)
+	}).catch(() => {
+		return {}
+	})
+	return Promise.all([settingsP, tempP]).then(values => {
+		return { settings: values[0], tempData: values[1] }
+	})
+}
+
+readSettingsAndTempData().then(result => {
+	var { settings, tempData } = result
+
+	const pageGen = require('./pages')(settings.srcPath, settings.distPath, settings.imageOptions, tempData)
+
+	return globP('pages/!(*.txt)')
+		.then((pictureFolders) => {
+			const pages = pictureFolders.map(createPageDefinition)
+			var promises = pages.map((page) => pageGen.generatePicturePage(page))
+			return Promise.all(promises).then(() => {
+				// sort in reverse order to have the newest post first
+				var sortedPages = pages.sort((a, b) => {
+					return b.index - a.index
+				})
+				return pageGen.generateIndex(sortedPages, settings.title)
+			})
+		})
+}).catch((error) => {
+	console.error(error)
+})
+
+
