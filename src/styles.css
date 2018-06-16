@@ -6,7 +6,6 @@ html, body {
 }
 
 .title {
-    min-height: 20vh;
     text-align: center;
 }
 
@@ -15,6 +14,13 @@ html, body {
     margin: 0;
 		line-height: 1;
 		font-variant-caps: all-petite-caps;
+}
+
+.title h2 {
+	font-weight: 400;
+	text-transform: uppercase;
+	font-size: 18px;
+	margin-top: 0px;
 }
 
 .picture-container {
@@ -51,7 +57,7 @@ img.pic.loaded {
     position: relative;
     width: 100%;
 		height: auto;
-		overflow: hidden;
+		display: block;
 	}
 
 	ul#menu li {
@@ -91,7 +97,8 @@ nav {
 #menu a,
 #menu a:visited {
     text-decoration: none;
-    color: #9a97a3;
+		color: #9a97a3;
+		text-transform: uppercase;
 }
 
 #menu a:hover {

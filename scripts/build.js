@@ -31,7 +31,7 @@ function createPageDefinition(pictureFolder, index) {
 
 //var tempSettings = JSON.parse(fse.readFileSync('/path/to/file.json', 'utf8'));
 function readSettingsAndTempData() {
-	var settingsP = fse.readFile('settings.json', 'utf8').then(file => {
+	return fse.readFile('settings.json', 'utf8').then(file => {
 		return JSON.parse(file)
 	}).catch(() => {
 		console.warn('no settings found, using default settings')
@@ -41,14 +41,13 @@ function readSettingsAndTempData() {
 				showTitle: false
 			}
 		}
-	})
-	var tempP = fse.readFile('.temp.json', 'utf8').then(file => {
-		return JSON.parse(file)
-	}).catch(() => {
-		return {}
-	})
-	return Promise.all([settingsP, tempP]).then(values => {
-		return { settings: values[0], tempData: values[1] }
+	}).then(settings => {
+		return fse.readFile('.temp.json', 'utf8').then(file => {
+			var tempData = JSON.parse(file)
+			return { settings, tempData }
+		}).catch(() => {
+			return { settings, tempData: {} }
+		})
 	})
 }
 
