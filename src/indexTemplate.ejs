@@ -34,7 +34,7 @@
 			var s = d.createElement("script"); s.async = true;
 			var v = !("IntersectionObserver" in w) ? "8.6.0" : "10.4.2";
 			s.src = "https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/" + v + "/lazyload.min.js";
-			w.lazyLoadOptions = { class_loaded: "loaded" }; // Your options here. See "recipes" for more information about async.
+			w.lazyLoadOptions = { class_loaded: "loaded", threshold: 2000 }; // Your options here. See "recipes" for more information about async.
 			b.appendChild(s);
 		}(window, document));
 	</script>
