@@ -29,7 +29,7 @@ module.exports = function (srcPath, distPath, imageOptions, tempData) {
 			var previousHash = tempData[page.name]
 			updateHash(page.name, result.hash)
 			if (result.hash === previousHash) {
-				if (fse.exists(destPath)) {
+				if (fse.existsSync(destPath)) {
 					return false
 				} else {
 					fse.mkdirs(destPath)
