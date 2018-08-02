@@ -83,7 +83,7 @@ module.exports = function () {
 		return sharp(source)
 			.resize(size)
 			.jpeg({
-				quality: 60,
+				quality: 80,
 			})
 			.toFile(destPicturePath).then(() => fileName)
 	}
