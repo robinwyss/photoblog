@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Photo Blog",
   "scripts": {
-    "build": "node ./scripts/build"
+		"build": "node ./scripts/build",
+		"rebuild": "node ./scripts/build clean"
   },
   "keywords": [],
   "author": "Robin Wyss",
