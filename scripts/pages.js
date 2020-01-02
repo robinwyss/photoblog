@@ -88,10 +88,12 @@ module.exports = function (srcPath, distPath, imageOptions, tempData) {
 			.then(templateContent => {
 				const content = ejs.render(templateContent, { pages, title })
 				console.info('generating index file')
-				return fse.writeFile(`${distPath}/index.html`, content)
+				return fse.ensureDir(`${distPath}/`).then(() => {
+					return fse.writeFile(`${distPath}/index.html`, content)
 					.then(fse.copyFile(`${srcPath}/styles.css`, `${distPath}/styles.css`))
 					.then(fse.copyFile(`${srcPath}/app.js`, `${distPath}/app.js`))
 					.then(fse.copyFile(`${srcPath}/favicon.ico`, `${distPath}/favicon.ico`))
+				})
 			})
 	}
 
