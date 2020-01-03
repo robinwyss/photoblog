@@ -7,11 +7,11 @@ const { hashElement } = require('folder-hash')
 /**
  *
  * 
- * @param {string} srcPath
+ * @param {string} templatePath
  * @param {string} distPath 
  * @param {[int]} imgSizes: array of sizes for which the pictures exists
  */
-module.exports = function (srcPath, distPath, imageOptions, tempData) {
+module.exports = function (templatePath, distPath, imageOptions, tempData) {
 
 	function updateHash(name, hash) {
 		tempData[name] = hash
@@ -63,7 +63,7 @@ module.exports = function (srcPath, distPath, imageOptions, tempData) {
 							return 0
 						})
 						console.info('generating HTML files')
-						return fse.readFile('./src/pageTemplate.ejs', 'utf-8')
+						return fse.readFile(templatePath + '/pageTemplate.ejs', 'utf-8')
 							.then(templateContent => {
 								const content = ejs.render(templateContent, { pictures, page, imageOptions })
 								const htmlFileName = `${distPath}/${page.documentName}.html`
@@ -84,14 +84,14 @@ module.exports = function (srcPath, distPath, imageOptions, tempData) {
 	 * @param {object[]} pages 
 	 */
 	function generateIndex(pages, title) {
-		return fse.readFile('./src/indexTemplate.ejs', 'utf-8')
+		return fse.readFile(templatePath + '/indexTemplate.ejs', 'utf-8')
 			.then(templateContent => {
 				const content = ejs.render(templateContent, { pages, title })
 				console.info('generating index file')
 				return fse.writeFile(`${distPath}/index.html`, content)
-					.then(fse.copyFile(`${srcPath}/styles.css`, `${distPath}/styles.css`))
-					.then(fse.copyFile(`${srcPath}/app.js`, `${distPath}/app.js`))
-					.then(fse.copyFile(`${srcPath}/favicon.ico`, `${distPath}/favicon.ico`))
+					.then(fse.copyFile(`${templatePath}/styles.css`, `${distPath}/styles.css`))
+					.then(fse.copyFile(`${templatePath}/app.js`, `${distPath}/app.js`))
+					.then(fse.copyFile(`${templatePath}/favicon.ico`, `${distPath}/favicon.ico`))
 			})
 	}
 

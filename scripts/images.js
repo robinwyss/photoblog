@@ -61,12 +61,13 @@ module.exports = function () {
 						console.error(error)
 					})
 			})
-		}, Promise.resolve({})).then(sizeDefinitions => {
-			return resizeAndCopy(source, 20, destFolder).then(fileName => {
-				sizeDefinitions.placeholder = fileName
-				return sizeDefinitions
+		}, Promise.resolve({}))
+			.then(sizeDefinitions => { // generate thumbnail for lazyload
+				return resizeAndCopy(source, 20, destFolder).then(fileName => {
+					sizeDefinitions.placeholder = fileName
+					return sizeDefinitions
+				})
 			})
-		})
 	}
 
 	/**
@@ -83,7 +84,7 @@ module.exports = function () {
 		return sharp(source)
 			.resize(size)
 			.jpeg({
-				quality: 80,
+				quality: 100,
 			})
 			.toFile(destPicturePath).then(() => fileName)
 	}
@@ -94,7 +95,8 @@ module.exports = function () {
 			try {
 				new exif({ image: path }, function (error, exifData) {
 					if (error) {
-						reject(error.message)
+						console.log(`no EXIF data found on image ${path}, description will be empty`);
+						resolve("")
 					}
 					else {
 						resolve(exifData.image.ImageDescription)

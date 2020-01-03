@@ -36,8 +36,8 @@ function readSettingsAndTempData() {
 	}).catch(() => {
 		console.warn('no settings found, using default settings')
 		return {
-			srcPath: './src', distPath: './public', title: 'KIRO', imageOptions: {
-				sizes: [720, 1080],
+			template: './templates/default', distPath: './public', title: 'KIRO', imageOptions: {
+				sizes: [720, 1080, 1600],
 				showTitle: false
 			}
 		}
@@ -59,7 +59,7 @@ function build(clean) {
 			fse.emptyDirSync(settings.distPath)
 		}
 		
-		const pageGen = require('./pages')(settings.srcPath, settings.distPath, settings.imageOptions, tempData)
+		const pageGen = require('./pages')(settings.template, settings.distPath, settings.imageOptions, tempData)
 	
 		return globP('pages/!(*.txt)')
 			.then((pictureFolders) => {

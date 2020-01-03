@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Photo Blog",
   "scripts": {
-		"build": "node ./scripts/build",
-		"rebuild": "node ./scripts/build clean"
+    "build": "node ./scripts/build",
+    "rebuild": "node ./scripts/build clean"
   },
   "keywords": [],
   "author": "Robin Wyss",
@@ -13,7 +13,7 @@
     "ejs": "^2.5.7",
     "fs-extra": "^5.0.0",
     "glob": "^7.1.2",
-    "sharp": "^0.20.0"
+    "sharp": "^0.23.0"
   },
   "dependencies": {
     "compress-images": "^1.3.7",

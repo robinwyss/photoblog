@@ -16,39 +16,51 @@ module.exports = function () {
 	// matches against a folder that starts with a date (year, month) and has a sequence number
 	// e.g 201802_01_Roadtrip
 	const folderWithDateAndNumberRegex = /^(\d{4})(\d{2})[_-](\d{2})?[_-]?(.+)$/
+	// folders for static pages star with an _ then have an index and another _ before the name
+	// e.g. _1_About 
+	const folderStaticPage = /^_(\d)_(.+)/
 
 	function extractInfoFromFolderName(foldername, index) {
 		// increment index to have it start at 1 instead of 0
 		var pageNumber = index + 1
 		var date
-		// try to get the date from the folder
-		var match = folderWithDateAndNumberRegex.exec(foldername)
+
+		// see if it is a folder with a static page
+		var match = folderStaticPage.exec(foldername)
 		if (match) {
-			date = formatDate(match[1], match[2])
-			// use the number from the folder as page number
-			pageNumber = parseInt(match[3])
-			foldername = match[4]
+			// substract 1000 the index in orer to have the static pages at the end
+			pageNumber = parseInt(match[1]) - 1000
+			foldername = match[2]
 		} else {
-			// try to match numbered folders
-			match = folderWithDateRegex.exec(foldername)
+			// try to get the date from the folder
+			match = folderWithDateAndNumberRegex.exec(foldername)
 			if (match) {
-				date = formatDate(match[1], match[2], match[3])
+				date = formatDate(match[1], match[2])
+				// use the number from the folder as page number
+				pageNumber = parseInt(match[3])
 				foldername = match[4]
 			} else {
 				// try to match numbered folders
-				match = folderWithDateSeparatorRegex.exec(foldername)
+				match = folderWithDateRegex.exec(foldername)
 				if (match) {
-					date = formatDate(match[1], match[2])
+					date = formatDate(match[1], match[2], match[3])
 					foldername = match[4]
-					// use the number from the folder as page number
-					pageNumber = parseInt(match[3])
 				} else {
 					// try to match numbered folders
-					match = folderNumberedRegex.exec(foldername)
+					match = folderWithDateSeparatorRegex.exec(foldername)
 					if (match) {
-						foldername = match[2]
+						date = formatDate(match[1], match[2])
+						foldername = match[4]
 						// use the number from the folder as page number
-						pageNumber = parseInt(match[1])
+						pageNumber = parseInt(match[3])
+					} else {
+						// try to match numbered folders
+						match = folderNumberedRegex.exec(foldername)
+						if (match) {
+							foldername = match[2]
+							// use the number from the folder as page number
+							pageNumber = parseInt(match[1])
+						}
 					}
 				}
 			}
