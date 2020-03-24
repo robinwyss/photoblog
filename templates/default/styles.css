@@ -54,15 +54,15 @@ img.pic.loaded {
 
 @media only screen and ( max-width:1024px) {
 	ul#menu {
-    position: relative;
-    width: 100%;
+    	position: relative;
+   		width: 100%;
 		height: auto;
-		display: block;
+		display: inline-block;
 	}
 
 	ul#menu li {
 		float: left;
-    margin-right: 20px;
+    	margin-right: 20px;
 	}
 
 	div#content {
