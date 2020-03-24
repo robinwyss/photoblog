@@ -1,7 +1,6 @@
 import { FolderInfo } from "./types"
+import * as moment from 'moment'
 
-
-const moment = require('moment')
 
 /**
  * formats the date, the day is optional.
@@ -15,9 +14,9 @@ const moment = require('moment')
  */
 export function formatDate(year: string, month: string, day: string = null) {
     if (day) {
-        return moment(`${year} ${month} ${day}`, 'YYYY M D').format('MMMM DD, YYYY')
+        return moment(`${year} ${month} ${day}`, 'YYYY M D')
     } else {
-        return moment(`${year} ${month}`, 'YYYY M').format('MMMM YYYY')
+        return moment(`${year} ${month}`, 'YYYY M')
     }
 }
 
@@ -45,6 +44,20 @@ function convertMatchToFolderInfo(match: RegExpExecArray, pageNumber: number): F
     }
 }
 
+/**
+ * Tries to extract information from a folder name, including name and index.
+ * The following formats are supported
+ *  - 01_Roadtrip -> index: 1, name: Roadtrip
+ *  - 201802_Roadtrip -> date: 2018.02, name: Roadtrip
+ *  - 20180218_Roadtrip -> date: 2018.02.18, name: Roadtrip
+ *  - 2018_02_Roadtrip -> date: 2018.02, name: Roadtrip
+ *  - 2018_02_18_Roadtrip -> date: 2018.02.18, name: Roadtrip
+ *  - 201802_01_Roadtrip -> date: 2018.02, name: Roadtrip
+ *  - 20180218_01_Roadtrip -> date: 2018.02.18, name: Roadtrip
+ * 
+ * @param name name of the folder
+ * @param index index
+ */
 export function extractInfoFromFolderName(name: string, index: number): FolderInfo {
     // increment index to have it start at 1 instead of 0
     var pageNumber = index + 1

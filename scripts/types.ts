@@ -1,3 +1,4 @@
+import { Moment } from 'moment'
 
 export type imageOptionsType = {
     sizes: number[]
@@ -29,6 +30,6 @@ export type PageType = {
 
 export type FolderInfo = {
     name: string,
-    pageNumber: number, 
-    date?: Date
+    pageNumber: number,
+    date?: Moment
 }
