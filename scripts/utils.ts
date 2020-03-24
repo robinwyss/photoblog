@@ -37,6 +37,14 @@ const folderWithDateAndNumberRegex = /^(\d{4})(\d{2})(\d{2})?[_-](\d{2})[_-](.+)
 // e.g. _1_About 
 const folderStaticPage = /^_(\d)_(.+)/
 
+function convertMatchToFolderInfo(match: RegExpExecArray, pageNumber: number): FolderInfo {
+    return {
+        date: formatDate(match[1], match[2], match[3]),
+        name: match[4],
+        pageNumber
+    }
+}
+
 export function extractInfoFromFolderName(name: string, index: number): FolderInfo {
     // increment index to have it start at 1 instead of 0
     var pageNumber = index + 1
@@ -48,37 +56,39 @@ export function extractInfoFromFolderName(name: string, index: number): FolderIn
         // substract 1000 the index in orer to have the static pages at the end
         pageNumber = parseInt(match[1]) - 1000
         name = match[2]
-    } else {
-        // try to get the date from the folder
-        match = folderWithDateAndNumberRegex.exec(name)
-        if (match) {
-            date = formatDate(match[1], match[2], match[3])
-            // use the number from the folder as page number
-            pageNumber = parseInt(match[4])
-            name = match[4]
-        } else {
-            // try to match numbered folders
-            match = folderWithDateRegex.exec(name)
-            if (match) {
-                date = formatDate(match[1], match[2], match[3])
-                name = match[4]
-            } else {
-                // try to match numbered folders
-                match = folderWithDateSeparatorRegex.exec(name)
-                if (match) {
-                    date = formatDate(match[1], match[2], match[3])
-                    name = match[4]
-                } else {
-                    // try to match numbered folders
-                    match = folderNumberedRegex.exec(name)
-                    if (match) {
-                        name = match[2]
-                        // use the number from the folder as page number
-                        pageNumber = parseInt(match[1])
-                    }
-                }
-            }
-        }
+        return { date, pageNumber, name }
     }
+
+    // try to get the date from the folder
+    match = folderWithDateAndNumberRegex.exec(name)
+    if (match) {
+        date = formatDate(match[1], match[2], match[3])
+        // use the number from the folder as page number
+        pageNumber = parseInt(match[4])
+        name = match[4]
+        return { date, pageNumber, name }
+    }
+
+    // try to match numbered folders
+    match = folderWithDateRegex.exec(name)
+    if (match) {
+        return convertMatchToFolderInfo(match, pageNumber)
+    }
+
+    // try to match numbered folders
+    match = folderWithDateSeparatorRegex.exec(name)
+    if (match) {
+        return convertMatchToFolderInfo(match, pageNumber)
+    }
+
+    // try to match numbered folders
+    match = folderNumberedRegex.exec(name)
+    if (match) {
+        name = match[2]
+        // use the number from the folder as page number
+        pageNumber = parseInt(match[1])
+        return { date, pageNumber, name }
+    }
+
     return { date, pageNumber, name }
 }
