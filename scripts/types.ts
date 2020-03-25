@@ -22,13 +22,19 @@ export type settingsType = {
 
 export type PageType = {
     name: string,
-    documentName: string,
     sourcePath: string,
     index: number,
-    date: Date
+    images: PictureInfoType[]
+    date: Moment
 }
 
-export type FolderInfo = {
+export type PictureInfoType = {
+    name: string
+    path: string
+    type: string
+}
+
+export type FolderInfoType = {
     name: string,
     pageNumber: number,
     date?: Moment

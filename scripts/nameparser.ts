@@ -1,4 +1,4 @@
-import { FolderInfo } from "./types"
+import { FolderInfoType } from "./types"
 import * as moment from 'moment'
 
 
@@ -36,7 +36,7 @@ const folderWithDateAndNumberRegex = /^(\d{4})(\d{2})(\d{2})?[_-](\d{2})[_-](.+)
 // e.g. _1_About 
 const folderStaticPage = /^_(\d)_(.+)/
 
-function convertMatchToFolderInfo(match: RegExpExecArray, pageNumber: number): FolderInfo {
+function convertMatchToFolderInfo(match: RegExpExecArray, pageNumber: number): FolderInfoType {
     return {
         date: formatDate(match[1], match[2], match[3]),
         name: match[4],
@@ -58,7 +58,7 @@ function convertMatchToFolderInfo(match: RegExpExecArray, pageNumber: number): F
  * @param name name of the folder
  * @param index index
  */
-export function extractInfoFromFolderName(name: string, index: number): FolderInfo {
+export function extractInfoFromFolderName(name: string, index: number): FolderInfoType {
     // increment index to have it start at 1 instead of 0
     var pageNumber = index + 1
     var date
@@ -78,7 +78,7 @@ export function extractInfoFromFolderName(name: string, index: number): FolderIn
         date = formatDate(match[1], match[2], match[3])
         // use the number from the folder as page number
         pageNumber = parseInt(match[4])
-        name = match[4]
+        name = match[5]
         return { date, pageNumber, name }
     }
 
