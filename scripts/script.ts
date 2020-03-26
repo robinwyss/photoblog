@@ -1,15 +1,20 @@
 import { emptyDirSync, readdirSync } from 'fs-extra'
 import readSettings from './settings'
 import getPages from './pageparser'
+import { generatePicturePages } from './sitegenerator'
 
 async function build(clean: boolean) {
-    const { userSettings, tempData } = await readSettings()
+
+    const settings = await readSettings()
     if (clean) {
-        console.log('cleaning ' + userSettings.distPath)
-        emptyDirSync(userSettings.distPath)
+        console.log('cleaning ' + settings.distPath)
+        emptyDirSync(settings.distPath)
     }
-    var pages = await getPages(userSettings.sourcePath);
-    pages.forEach(page => console.log(page))
+    console.log('reading pages')
+    var pages = await getPages(settings.sourcePath);
+
+    console.log('generite site')
+    generatePicturePages(pages, settings)
     return
 }
 

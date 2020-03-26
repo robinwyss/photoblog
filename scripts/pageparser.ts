@@ -16,7 +16,7 @@ function getImagesInFolder(pictureFolder: string): Promise<PictureInfoType[]> {
                 rej(error)
             }
             var pictures = matches.map(imagePath => {
-                return { name: path.basename(imagePath), path: imagePath, type: path.extname(imagePath) }
+                return { filename: path.basename(imagePath), path: imagePath, type: path.extname(imagePath) }
             })
             res(pictures)
         })
@@ -35,7 +35,7 @@ async function createPageDefinition(sourcePath: string, pictureFolderName: strin
     var images = await getImagesInFolder(folderPath)
     // page name without spaces to use in urls
     var documentName = pictureFolderName.replace(' ', '')
-    return { name: pageInfo.name, sourcePath: folderPath, index: pageInfo.pageNumber, images, date: pageInfo.date }
+    return { name: pictureFolderName, title: pageInfo.name, sourcePath: folderPath, index: pageInfo.pageNumber, images, date: pageInfo.date }
 }
 
 /**
