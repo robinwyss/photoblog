@@ -1,12 +1,35 @@
+const pageTemplate = `
+	<div>
+		<div class="title">
+			<span>
+				<h1>
+					<%= title %>
+				</h1>
+				<% if (date) { %>
+					<h2>
+						<%= date %>
+					</h2>
+					<%} %>
+			</span>
+		</div>
+		<% images.forEach(function(image){ %>
+			<div class="picture-container">
+				<figure>
+					<img class="pic" src="<%=name + '/' + image.name %>" />
+				</figure>
+			</div>
+			<% }); %>
+	</div>`
+
 function loadPage(pageLink) {
 	// remove # and append .html
-	var url = pageLink.slice(1) + '.html'
+	var url = pageLink.slice(1) + '/pageData.json'
 	fetch(url).then(function (content) {
 		return content.text()
 	}).then(function (content) {
-		window.scrollTo(0, 0)
-		document.querySelector('#content').innerHTML = content
-		window.lazyLoadInstance.update()
+		window.scrollTo(0, 0);
+		var pageData = JSON.parse(content);
+		renderPage(pageData);
 	}).catch(function (error) {
 		console.error(error)
 	})
@@ -25,20 +48,13 @@ function router() {
 	}
 }
 function init() {
-	initLazyLoad().then(function () {
-		router()
-	})
+	router()
 }
 
-function initLazyLoad() {
-	return new Promise(function (resolve) {
-		// Listen to the Initialized event
-		window.addEventListener('LazyLoad::Initialized', function (e) {
-			// Get the instance and puts it in the lazyLoadInstance variable
-			window.lazyLoadInstance = e.detail.instance
-			resolve()
-		}, false)
-	})
+function renderPage(pageData) {
+
+	var html = ejs.render(pageTemplate, pageData)
+	document.querySelector('#content').innerHTML = html
 }
 
 document.addEventListener('DOMContentLoaded', init)

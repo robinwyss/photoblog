@@ -1,9 +1,9 @@
-import { PageInfoType, PictureInfoType, SettingsType, ImageOptionsType, ImageDefinitionType } from "../types"
+import { PageInfoType, PictureInfoType, SettingsType, ImageOptionsType, ImageDefinitionType, PageContentType } from "../types"
 import { emptyDirSync, copy } from 'fs-extra'
 import * as path from 'path'
 import { getCache } from './cache'
 import { forEachAsync } from '../utils/utils'
-import { generatePageContent } from './contentgenerator'
+import { generatePageContent, generateHtml } from './contentgenerator'
 
 /**
  * Creates the given folder or deletes all its content if it already exists. 
@@ -21,6 +21,14 @@ async function copyImages(images: PictureInfoType[], destinationFolder: string, 
     })
 }
 
+
+async function generatePage(destPath: string, page: PageInfoType, settings: SettingsType, pageContentDefinition: PageContentType) {
+    createEmptyFolder(destPath)
+    const images = await copyImages(page.images, destPath, settings.imageOptions)
+    pageContentDefinition.images = images
+    await generatePageContent(pageContentDefinition, destPath)
+}
+
 /**
 * Generates a page
 * 
@@ -28,22 +36,23 @@ async function copyImages(images: PictureInfoType[], destinationFolder: string, 
 */
 export async function copyAndResizeContent(pages: PageInfoType[], settings: SettingsType) {
     const cache = await getCache()
-    forEachAsync(pages, async page => {
+    const pageContents = await forEachAsync(pages, async page => {
         const destPath = path.join(settings.distPath, page.name)
+        const pageContentDefinition: PageContentType = { name: page.name, title: page.title, date: page.date }
         if (await cache.isOutdated(destPath)) {
             console.log(`generating ${page.name}`)
-            createEmptyFolder(destPath);
-            var images = await copyImages(page.images, destPath, settings.imageOptions)
-            var pageContentDefinition = { name: page.name, title: page.title, date: page.date, images }
-            await generatePageContent(pageContentDefinition, destPath)
+            await generatePage(destPath, page, settings, pageContentDefinition)
             await cache.updateCache(destPath)
         } else {
             console.log(`page ${page.name} hasn't changed, it won't be generated.`)
         }
-        return
+        return pageContentDefinition
     })
     cache.saveCache()
+    console.log('generating HTML')
+    generateHtml(settings.title, pageContents, settings.distPath, settings.template)
 }
+
 
 /**
 	 * Generates a page

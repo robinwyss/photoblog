@@ -15,7 +15,7 @@
     "@types/glob": "^7.1.1",
     "@types/mocha": "^7.0.2",
     "chai": "^4.2.0",
-    "ejs": "^2.7.4",
+    "ejs": "^3.0.1",
     "exif": "^0.6.0",
     "folder-hash": "^3.3.0",
     "fs-extra": "^9.0.0",
@@ -27,6 +27,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
+    "@types/ejs": "^3.0.1",
     "@types/fs-extra": "^8.1.0",
     "@types/node": "^13.9.3"
   }

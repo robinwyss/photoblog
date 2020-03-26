@@ -58,7 +58,7 @@ export type PageContentType = {
     name: string,
     title: string,
     date: Moment
-    images: ImageDefinitionType[]
+    images?: ImageDefinitionType[]
 }
 
 export type ImageDefinitionType = {

@@ -10,6 +10,7 @@ async function build(clean: boolean) {
         console.log('cleaning ' + settings.distPath)
         emptyDirSync(settings.distPath)
     }
+    
     console.log('reading pages')
     var pages = await getPages(settings.sourcePath);
 
