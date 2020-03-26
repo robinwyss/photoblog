@@ -1,5 +1,5 @@
 import { SettingsType, CacheDataType } from './types'
-import { readFileOrDefault } from './fileutils'
+import { readFileOrDefault } from './utils/fileutils'
 
 const defaultSettings: SettingsType = {
     sourcePath: "./pages",

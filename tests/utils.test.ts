@@ -1,6 +1,6 @@
 import { describe } from 'mocha'
 import { expect } from 'chai'
-import { extractInfoFromFolderName, formatDate } from '../scripts/nameparser'
+import { extractInfoFromFolderName, formatDate } from '../scripts/parser/nameparser'
 import * as moment from 'moment'
 
 describe('utils regex', function () {

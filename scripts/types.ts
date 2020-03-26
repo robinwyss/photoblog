@@ -27,7 +27,7 @@ export type CacheDataType = { [key: string]: string }
 /**
  * The definition of the source for a page
  */
-export type PageType = {
+export type PageInfoType = {
     name: string,
     title: string,
     sourcePath: string,
@@ -58,10 +58,10 @@ export type PageContentType = {
     name: string,
     title: string,
     date: Moment
-    images: ImageDefinitionTypes[]
+    images: ImageDefinitionType[]
 }
 
-export type ImageDefinitionTypes = {
+export type ImageDefinitionType = {
     name: string,
     sizes: ImageSize[]
 }
@@ -69,5 +69,5 @@ export type ImageDefinitionTypes = {
 export type ImageSize = {
     width: number
     height: number
-    name: string
+    filename: string
 }

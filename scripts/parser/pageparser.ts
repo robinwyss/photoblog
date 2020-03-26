@@ -1,5 +1,5 @@
 import { readdirSync } from 'fs-extra'
-import { PageType, PictureInfoType } from './types'
+import { PageInfoType, PictureInfoType } from '../types'
 import { extractInfoFromFolderName } from './nameparser'
 import * as glob from 'glob'
 import * as path from 'path'
@@ -29,7 +29,7 @@ function getImagesInFolder(pictureFolder: string): Promise<PictureInfoType[]> {
  * @param string pictureFolder 
  * @returns  an object containing the name and the path. e.g. {name: California, sourcePath: pictures/01_California} 
  */
-async function createPageDefinition(sourcePath: string, pictureFolderName: string, index: number): Promise<PageType> {
+async function createPageDefinition(sourcePath: string, pictureFolderName: string, index: number): Promise<PageInfoType> {
     var folderPath = path.join(sourcePath, pictureFolderName)
     var pageInfo = extractInfoFromFolderName(pictureFolderName, index)
     var images = await getImagesInFolder(folderPath)
@@ -43,7 +43,7 @@ async function createPageDefinition(sourcePath: string, pictureFolderName: strin
  * 
  * @param sourcePath 
  */
-async function getPages(sourcePath: string): Promise<PageType[]> {
+async function getPages(sourcePath: string): Promise<PageInfoType[]> {
     var pagePromises = readdirSync(sourcePath, { withFileTypes: true })
         .filter(filInfo => filInfo.isDirectory())
         .map(async (fileInfo, index) => {

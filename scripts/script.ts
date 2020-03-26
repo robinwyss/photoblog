@@ -1,7 +1,7 @@
 import { emptyDirSync, readdirSync } from 'fs-extra'
 import readSettings from './settings'
-import getPages from './pageparser'
-import { generatePicturePages } from './sitegenerator'
+import getPages from './parser/pageparser'
+import { generatePicturePages } from './generator/sitegenerator'
 
 async function build(clean: boolean) {
 

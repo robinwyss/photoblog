@@ -1,4 +1,4 @@
-import { FolderInfoType } from "./types"
+import { FolderInfoType } from "../types"
 import * as moment from 'moment'
 
 
@@ -14,9 +14,9 @@ import * as moment from 'moment'
  */
 export function formatDate(year: string, month: string, day: string = null) {
     if (day) {
-        return moment(`${year} ${month} ${day}`, 'YYYY M D')
+        return moment.utc(`${year} ${month} ${day}`, 'YYYY M D')
     } else {
-        return moment(`${year} ${month}`, 'YYYY M')
+        return moment.utc(`${year} ${month}`, 'YYYY M')
     }
 }
 

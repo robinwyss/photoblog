@@ -1,6 +1,6 @@
 import { writeFileSync, existsSync } from 'fs-extra'
-import { readFileOrDefault } from './fileutils'
-import { CacheDataType } from './types';
+import { readFileOrDefault } from '../utils/fileutils'
+import { CacheDataType } from '../types';
 import { hashElement } from 'folder-hash'
 import * as path from 'path'
 
