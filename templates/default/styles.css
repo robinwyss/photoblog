@@ -43,7 +43,8 @@ img.pic {
 	max-height: 100vh;
 	margin-left: auto;
 	margin-right: auto;
-	width: 100%;
+	width: auto;
+	height: auto;
 }
 
 img.pic.loaded {

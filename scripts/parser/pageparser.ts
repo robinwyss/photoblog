@@ -16,7 +16,8 @@ function getImagesInFolder(pictureFolder: string): Promise<PictureInfoType[]> {
                 rej(error)
             }
             var pictures = matches.map(imagePath => {
-                return { filename: path.basename(imagePath), path: imagePath, type: path.extname(imagePath) }
+                const extension = path.extname(imagePath)
+                return { filename: path.basename(imagePath), name: path.basename(imagePath, extension), path: imagePath, type: extension }
             })
             res(pictures)
         })

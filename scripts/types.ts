@@ -41,6 +41,7 @@ export type PageInfoType = {
  */
 export type PictureInfoType = {
     filename: string
+    name: string
     path: string
     type: string
 }
@@ -68,6 +69,5 @@ export type ImageDefinitionType = {
 
 export type ImageSize = {
     width: number
-    height: number
     filename: string
 }

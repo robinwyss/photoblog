@@ -4,6 +4,7 @@ import * as path from 'path'
 import { getCache } from './cache'
 import { forEachAsync } from '../utils/utils'
 import { generatePageContent, generateHtml } from './contentgenerator'
+import * as sharp from 'sharp'
 
 /**
  * Creates the given folder or deletes all its content if it already exists. 
@@ -12,6 +13,23 @@ import { generatePageContent, generateHtml } from './contentgenerator'
  */
 function createEmptyFolder(path: string) {
     emptyDirSync(path)
+}
+
+async function resizeImages(images: PictureInfoType[], destinationFolder: string, imageOptions: ImageOptionsType): Promise<ImageDefinitionType[]> {
+    return await forEachAsync(images, async image => {
+        var sizeDefinitions = await forEachAsync(imageOptions.sizes, async size => {
+            var filename = `${image.name}_${size}.jpeg`;
+            await sharp(image.path)
+                .resize(size)
+                .jpeg({
+                    quality: 80,
+                })
+                .toFile(path.join(destinationFolder, filename))
+            return { width: size, filename }
+        })
+        return { name: image.filename, sizes: sizeDefinitions }
+    })
+
 }
 
 async function copyImages(images: PictureInfoType[], destinationFolder: string, imageOptions: ImageOptionsType): Promise<ImageDefinitionType[]> {
@@ -24,7 +42,7 @@ async function copyImages(images: PictureInfoType[], destinationFolder: string, 
 
 async function generatePage(destPath: string, page: PageInfoType, settings: SettingsType, pageContentDefinition: PageContentType) {
     createEmptyFolder(destPath)
-    const images = await copyImages(page.images, destPath, settings.imageOptions)
+    const images = await resizeImages(page.images, destPath, settings.imageOptions)
     pageContentDefinition.images = images
     await generatePageContent(pageContentDefinition, destPath)
 }
