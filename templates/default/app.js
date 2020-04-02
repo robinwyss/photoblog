@@ -14,9 +14,9 @@ const pageTemplate = `
 		</div>
 		<% images.forEach(function(image){ %>
 			<div class="picture-container">
-				<img class="pic" src="<%=name + '/' + image.name %>" 
-					srcset="<%- image.sizes.reduce( (result, sizeDef) => result + name + '/' + sizeDef.filename + ' ' + sizeDef.width + 'w, ', '') %>"
-					sizes="<%- image.sizes.reduce( (result, sizeDef) => result + '(max-width: '+(sizeDef.width+200)+'px) '+sizeDef.width+'px, ', '') + ', '+ image.sizes[0].width+'px' %>"
+				<img class="pic lazyload" data-src="<%=name + '/' + image.name %>" 
+					data-srcset="<%- image.sizes.reduce( (result, sizeDef) => result + name + '/' + sizeDef.filename + ' ' + sizeDef.width + 'w, ', '') %>"
+					data-sizes="<%- image.sizes.reduce( (result, sizeDef) => result + '(max-width: '+(sizeDef.width+200)+'px) '+sizeDef.width+'px, ', '') + ', '+ image.sizes[0].width+'px' %>"
 					/>
 			</div>
 			<% }); %>
