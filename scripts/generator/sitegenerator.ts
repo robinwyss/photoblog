@@ -1,10 +1,11 @@
-import { PageInfoType, PictureInfoType, SettingsType, ImageOptionsType, ImageDefinitionType, PageContentType } from "../types"
+import * as sharp from 'sharp'
 import { emptyDirSync, copy } from 'fs-extra'
 import * as path from 'path'
+import { PageInfoType, PictureInfoType, SettingsType, ImageOptionsType, ImageDefinitionType, PageContentType } from "../types"
 import { getCache } from './cache'
 import { forEachAsync } from '../utils/utils'
 import { generatePageContent, generateHtml } from './contentgenerator'
-import * as sharp from 'sharp'
+
 
 /**
  * Creates the given folder or deletes all its content if it already exists. 
@@ -31,14 +32,6 @@ async function resizeImages(images: PictureInfoType[], destinationFolder: string
     })
 
 }
-
-async function copyImages(images: PictureInfoType[], destinationFolder: string, imageOptions: ImageOptionsType): Promise<ImageDefinitionType[]> {
-    return await forEachAsync(images, async image => {
-        await copy(image.path, path.join(destinationFolder, image.filename))
-        return { name: image.filename, sizes: [{ width: 1000, height: 1000, filename: image.filename }] }
-    })
-}
-
 
 async function generatePage(destPath: string, page: PageInfoType, settings: SettingsType, pageContentDefinition: PageContentType) {
     createEmptyFolder(destPath)

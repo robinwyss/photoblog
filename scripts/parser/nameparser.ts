@@ -1,5 +1,5 @@
-import { FolderInfoType } from "../types"
 import * as moment from 'moment'
+import { FolderInfoType } from "../types"
 
 
 /**

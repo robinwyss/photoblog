@@ -1,8 +1,9 @@
 import { readdirSync } from 'fs-extra'
-import { PageInfoType, PictureInfoType } from '../types'
-import { extractInfoFromFolderName } from './nameparser'
 import * as glob from 'glob'
 import * as path from 'path'
+import { PageInfoType, PictureInfoType } from '../types'
+import { extractInfoFromFolderName } from './nameparser'
+
 
 /**
  * Get all pictures within the folder

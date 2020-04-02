@@ -1,7 +1,8 @@
-import { PageContentType } from "../types";
-import { writeFile, readFile, copy } from "fs-extra";
 import * as path from 'path'
 import * as ejs from 'ejs'
+
+import { PageContentType } from "../types";
+import { writeFile, readFile, copy } from "fs-extra";
 import { forEachAsync } from "../utils/utils";
 
 export async function generatePageContent(pageContent: PageContentType, folderPath: string) {
@@ -17,9 +18,21 @@ async function copyStaticFiles(templatePath: string, folderPath: string) {
 
 }
 
+function sortPages(pages: PageContentType[]) {
+    return pages.sort((a, b) => {
+        if (a.name.startsWith("_") && !b.name.startsWith("_")) {
+            return 1;
+        } else if (!a.name.startsWith("_") && b.name.startsWith("_")) {
+            return -1;
+        }
+        return a.name > b.name ? -1 : 1;
+    })
+}
+
 export async function generateHtml(title: string, pages: PageContentType[], folderPath: string, templatePath: string) {
     const templateContent = await readFile(templatePath + '/indexTemplate.ejs', 'utf-8')
-    const content = ejs.render(templateContent, { pages, title })
+    const sortedPages = sortPages(pages)
+    const content = ejs.render(templateContent, { pages: sortedPages, title })
     var filePath = path.join(folderPath, 'index.html')
     await copyStaticFiles(templatePath, folderPath)
     await writeFile(filePath, content, { encoding: 'utf8', flag: 'w' })

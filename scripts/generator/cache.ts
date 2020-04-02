@@ -1,9 +1,8 @@
+import { hashElement } from 'folder-hash'
+import * as path from 'path'
 import { writeFileSync, existsSync } from 'fs-extra'
 import { readFileOrDefault } from '../utils/fileutils'
 import { CacheDataType } from '../types';
-import { hashElement } from 'folder-hash'
-import * as path from 'path'
-
 
 const cacheDataFile = '.temp.json';
 

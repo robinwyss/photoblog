@@ -1,5 +1,5 @@
 import { emptyDirSync, readdirSync } from 'fs-extra'
-import readSettings from './settings'
+import readSettings from './utils/settingsloader'
 import getPages from './parser/pageparser'
 import { generatePicturePages } from './generator/sitegenerator'
 
