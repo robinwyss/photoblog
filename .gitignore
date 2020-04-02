@@ -1,4 +1,7 @@
 .temp.json
+.ionide/
+.vs/
+.vscode/
 public/
 pages/
 node_modules/
