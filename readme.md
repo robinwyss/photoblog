@@ -7,10 +7,10 @@ Static site generator to create a photo blog based on a file structure
 *root*
 |
 ├── */src/*
-|- */pages/*: contains the folders used to generate the site 
-|- */public/*: contains the final site
-|- */scripts/*: scripts used to generate the file
-|- */src/*: templates used to generate the pages
+├── */pages/*: contains the folders used to generate the site 
+├── */public/*: contains the final site
+├── */scripts/*: scripts used to generate the file
+├── */src/*: templates used to generate the pages
 ```
 
 This project was inspired by
