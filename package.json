@@ -3,20 +3,30 @@
   "version": "1.0.0",
   "description": "Photo Blog",
   "scripts": {
-    "build": "node ./scripts/build",
-    "rebuild": "node ./scripts/build clean"
+    "build": "ts-node ./scripts/build.ts --trace-warnings",
+    "rebuild": "ts-node ./scripts/build.ts clean",
+    "test": "mocha -r ts-node/register tests/**/*.test.ts"
   },
   "keywords": [],
   "author": "Robin Wyss",
   "license": "ISC",
   "devDependencies": {
-    "ejs": "^2.7.4",
-    "exif": "^0.6.0",
-    "folder-hash": "^2.1.2",
-    "fs-extra": "^5.0.0",
+    "@types/chai": "^4.2.11",
+    "@types/ejs": "^3.0.2",
+    "@types/fs-extra": "^8.1.0",
+    "@types/glob": "^7.1.1",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.11.0",
+    "@types/sharp": "^0.24.0",
+    "chai": "^4.2.0",
+    "ejs": "^3.0.2",
+    "folder-hash": "^3.3.0",
+    "fs-extra": "^9.0.0",
     "glob": "^7.1.6",
+    "mocha": "^7.1.1",
     "moment": "^2.24.0",
-    "sharp": "^0.23.4"
-  },
-  "dependencies": {}
+    "sharp": "^0.25.2",
+    "ts-node": "^8.8.1",
+    "typescript": "^3.8.3"
+  }
 }
